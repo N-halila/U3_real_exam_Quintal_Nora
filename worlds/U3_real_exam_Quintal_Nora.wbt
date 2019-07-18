@@ -2,8 +2,8 @@
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.21065418031662328 0.9608797959956971 0.179818892117595 4.830475263513743
-  position -0.5224736644738969 0.46591386039493327 0.15939194287783998
+  orientation 0.7070506091571483 -0.6868942265331359 -0.16809449023079312 5.616776489388953
+  position 0.2497842997496594 0.45808264153082284 0.6935289739337516
 }
 TexturedBackground {
 }
@@ -13,6 +13,7 @@ Floor {
 }
 DEF OMNI_WHEELS Robot {
   translation 0 0.07000000000000003 0
+  rotation 0 0.9999999999999999 0 4.712388966
   children [
     DEF SOLID1 Solid {
       children [
@@ -829,7 +830,7 @@ DEF OMNI_WHEELS Robot {
   boundingObject USE BODY
   physics Physics {
   }
-  controller "prueba"
+  controller "U3_real_exam_Quintal_Nora"
 }
 Solid {
   translation -1.5 0.25 0
