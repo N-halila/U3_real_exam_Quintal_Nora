@@ -44,7 +44,7 @@ enum {
   AIMING,
   ENEMY,
   EMPTY,
-  STOP
+  SHOOTING
 };
 
 double initial_angle_wheel1;
@@ -75,13 +75,13 @@ int checkForEnemy(WbDeviceTag distance_sensor) {
     return ENEMY;
 }
 
-void goRobot(WbDeviceTag *wheels, double velocity) {
+void goRobot(WbDeviceTag *wheels, double vel) {
   wb_motor_set_position(wheels[0], INFINITY);
   wb_motor_set_velocity(wheels[0], 0);
   wb_motor_set_position(wheels[1], INFINITY);
-  wb_motor_set_velocity(wheels[1], velocity);
+  wb_motor_set_velocity(wheels[1], vel);
   wb_motor_set_position(wheels[2], INFINITY);
-  wb_motor_set_velocity(wheels[2], -velocity);
+  wb_motor_set_velocity(wheels[2], -vel);
 }
 
 void stopRobot(WbDeviceTag *wheels) {
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
   wb_distance_sensor_enable(rad, TIME_STEP);
 
   short int ds_state,robot_state = GO;
-  float velocity = 4;
+  float vel = 4;
   float angle;
   float ang2;
   float pos;
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
       ds_state = checkForObstacles(dis_sen);
 
       if (ds_state == FREEWAY) {
-        goRobot(wheels, velocity);
+        goRobot(wheels, vel);
         angle = wb_position_sensor_get_value(encoder);
         printf("We are free of enemys\n");
 
@@ -196,17 +196,17 @@ int main(int argc, char **argv)
       ds_state = checkForEnemy(rad);
 
         if (ds_state == EMPTY) {
-          goRobot(wheels, velocity);
+          goRobot(wheels, vel);
           printf("We are free of enemys\n");
         }
         else if (ds_state == ENEMY) {
-          ds_state = STOP;
+          ds_state = SHOOTING;
           stopRobot(wheels);
           stopSensor(radar);
           ang2 = getAngle(radar_sen_pos);
           pos = (turns + ang2)*-1;
         }
-        if (ds_state== STOP) {
+        if (ds_state== SHOOTING) {
 
           rotateGun(gun, pos);
             if (dis2 >= 0.6 && dis2 <= 0.4 ) {
@@ -222,9 +222,7 @@ int main(int argc, char **argv)
     }
 
   };
-
-
-  wb_robot_cleanup();
+    wb_robot_cleanup();
 
   return 0;
 }
