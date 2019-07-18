@@ -108,7 +108,7 @@ void stopSensor(WbDeviceTag *radar) {
 }
 
 void rotateGun(WbDeviceTag *gun, double pos) {
-  wb_motor_set_position(gun[1], pos);
+  wb_motor_set_position(gun[0], pos);
 
 }
 
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
       if (ds_state == FREEWAY) {
         goRobot(wheels, velocity);
         angle = wb_position_sensor_get_value(encoder);
-        //printf("Angle: %lf\n", angle);
+        printf("We are free of enemys\n");
 
       } else if (ds_state == OBSTACLE) {
         robot_state = TURN;
@@ -189,6 +189,7 @@ int main(int argc, char **argv)
           if (angle >= PI ) {
             robot_state = AIMING;
             stopRobot(wheels);
+            printf("We are free of enemys\n");
           }
     }
     if (robot_state == AIMING) {
@@ -196,6 +197,7 @@ int main(int argc, char **argv)
 
         if (ds_state == EMPTY) {
           goRobot(wheels, velocity);
+          printf("We are free of enemys\n");
         }
         else if (ds_state == ENEMY) {
           ds_state = STOP;
@@ -203,7 +205,6 @@ int main(int argc, char **argv)
           stopSensor(radar);
           ang2 = getAngle(radar_sen_pos);
           pos = (turns + ang2)*-1;
-          //printf("Pos: %lf\n", pos);
         }
         if (ds_state== STOP) {
 
