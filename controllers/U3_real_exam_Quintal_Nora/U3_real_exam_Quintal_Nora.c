@@ -64,13 +64,13 @@ int checkForObstacles(WbDeviceTag dis_S1) {
 int checkForTheEnemy(WbDeviceTag distance_sensor) {
   double distance2 = wb_distance_sensor_get_value(distance_sensor);
   
-  dis2 = (distance2*RANGE2)/MAXRE2;
+  dis_2 = (distance2*RANGE2)/MAXRE2;
   
-  if(dis2 <= 0.7) {
+  if(dis_2 <= 0.7) {
       printf("The Enemy!: THA!\n");
   }
   
-  if (dis2 > OBSTACLE_DISTANCE_2)
+  if (dis_2 > OBSTACLE_DISTANCE_2)
     return ANYENEMY;
   else
     return Enemy;
@@ -107,8 +107,8 @@ void sensorRotate(WbDeviceTag *radar) {
 }
 
 void stopSensor(WbDeviceTag *radar_gun) {
-  wb_motor_set_position(radar[0], INFINITY);
-  wb_motor_set_velocity(radar[0], 0);
+  wb_motor_set_position(radar[1], INFINITY);
+  wb_motor_set_velocity(radar[1], 0);
 }
 
 void gunRotation(WbDeviceTag *gun, double pos_rad) {
@@ -174,63 +174,74 @@ int main(int argc, char **argv)
    WbDeviceTag ps_gun = wb_robot_get_device("POS_GUN");
    wb_position_sensor_enable(ps_gun, TIME_STEP);
 
+    float angle;
+    float angle1;
+    float pos_sen;
+    float velocity= 4;
+    float vueltas=20;
   /*
    * main loop
    */
   while (wb_robot_step(TIME_STEP) != -1) {
        ///Para el autonomo debe hacerlo todo por su cuenta
-
-      if (robot_state == Go) {
+      sensor_Rotate(radar);
+      
+      if (robot_state == GO) {
         ds_state = checkForObstacles(DSensor[0]);
-        ds_state1 = checkForObstacles(DSensor[1]);
 
-        dis1 = wb_distance_sensor_get_value(DSensor[0]);
-        dis2 = wb_distance_sensor_get_value(DSensor[1]);
-        printf ("dis1 : %lf\n",dis1);
-        printf ("dis2 : %lf\n",dis2);
-
-        if (ds_state == FreeWay && ds_state1 == FreeWay) {
-          velocity = 8;///nueva velocidad para moverse automatico
+        if (ds_state == FreeWay) {
+            goRobot(wheels, velocity);
+            angle = wb_position_sensor_get_value(encoder);
+        } 
+        
+        else if (ds_state == Obstacle) {
+            robot_state = TURN;
+            stopRobot(wheels);
+            initial_angle_wheel1 = wb_position_sensor_get_value(encoder);
+        }     
+        else if (robot_state == TURN) {
+            turnRight(wheels);
+            angle = getAngleRobot(encoder);
+      
+          if (angle >= PI ) {
+            robot_state = LOOKING;  
+            stopRobot(wheels);
+          }
+    } 
+    
+     if (robot_state == LOOKING) {
+      ds_state = checkForEnemy(rad); 
+      
+        if (ds_state == ANYENEMY) {
           goRobot(wheels, velocity);
-        } else if (ds_state == Obstacle && ds_state1 == FreeWay) {
-            robot_state = TurnL;
-            stopRobot(wheels);
-        } else if (ds_state == FreeWay && ds_state1 == Obstacle) {
-            robot_state = TurnR;
-            stopRobot(wheels);
-        } else if (ds_state == Obstacle && ds_state1 == Obstacle) {
-            robot_state = TurnL;
-            stopRobot(wheels);
         }
-      } else if (robot_state == TurnL) {
-          turnLeft(wheels);
-          ds_state = checkForObstacles(DSensor[0]);
-          ds_state1 = checkForObstacles(DSensor[1]);
-          if (ds_state == FreeWay && ds_state1 == FreeWay) {
-            robot_state = Go;
-            stopRobot(wheels);
-          }
-      } else if (robot_state == TurnR) {
-          turnRight(wheels);
-          ds_state = checkForObstacles(DSensor[0]);
-          ds_state1 = checkForObstacles(DSensor[1]);
-          if (ds_state1 == FreeWay && ds_state == FreeWay) {
-            robot_state = Go;
-            stopRobot(wheels);
-          }
-      }
-     }
-
-        ) } else {
-             stopRobot(wheels);
-         }
-          dis1 = wb_distance_sensor_get_value(DSensor[0]);
-          dis2 = wb_distance_sensor_get_value(DSensor[1]);
-          printf ("dis1 : %lf\n",dis1);///impresiones distance sensors
-          printf ("dis2 : %lf\n",dis2);
-       }
-
-
+        
+        else if (ds_state == Enemy) {
+          ds_state = STOP;
+          stopRobot(wheels);
+          stopSensor(radar);
+          angle1 = getAngle(ps_radar);
+          pos_sen = (vueltas + angle1)*-1; 
+        
+        }
+        if (ds_state== STOP) {
+       
+            gun_Rotation(Gun, pos)_sen;
+        
+            if (dis_2 >= 0.7 && dis_2 <= 0.5 ) {
+              printf("Enemy: THA!\n");
+            }
+            else if (dis_2 <= 0.5 && dis_2 >= 0.2) {
+              printf("Enemy: THA THA!!\n");
+            }
+            else if (dis_2 <= 0.2 && dis_2 >= 0.1) {
+              printf("Enemy: THA THA THA!!!\n");
+            }
+        }
+    } 
+    
+  };
+        
   /* Enter your cleanup code here */
 
   /* This is necessary to cleanup webots resources */
