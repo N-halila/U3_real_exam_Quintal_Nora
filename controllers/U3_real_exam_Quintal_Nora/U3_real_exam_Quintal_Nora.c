@@ -5,29 +5,18 @@
  * Author:
  * Modifications:
  */
-
-/*
- * You may need to add include files like <webots/distance_sensor.h> or
- * <webots/differential_wheels.h>, etc.
- */
 #include <webots/robot.h>
 #include <webots/motor.h>
 #include <webots/position_sensor.h>
 #include <webots/distance_sensor.h>
-
 #include <stdio.h>
 #include <math.h>
 
-/*
- * You may want to add macros here.
- */
 #define TIME_STEP 64
 #define PI 3.14159
-
 #define OBSTACLE_DISTANCE 0.2
 #define RANGE 0.4
 #define MAXRE 255
-
 #define OBSTACLE_DISTANCE_2 0.72
 #define RANGE2 2
 #define MAXRE2 1023
@@ -115,18 +104,14 @@ void rotateGun(WbDeviceTag *gun, double pos) {
 double getAngleRobot(WbDeviceTag pos_sensor) {
 
   double angle, angle_wheel1;
-
   angle_wheel1 = wb_position_sensor_get_value(pos_sensor);
   angle = fabs(angle_wheel1 - initial_angle_wheel1);
-
   return angle;
 }
 
 double getAngle(WbDeviceTag radar_sensor) {
   double  angle_2, radar_angle;
-
   radar_angle = wb_position_sensor_get_value(radar_sensor);
-
   angle_2 = radar_angle;
   return angle_2;
 }
@@ -134,7 +119,7 @@ double getAngle(WbDeviceTag radar_sensor) {
 
 int main(int argc, char **argv)
 {
-  /* necessary to initialize webots stuff */
+  
   wb_robot_init();
 
   WbDeviceTag wheels[3];
