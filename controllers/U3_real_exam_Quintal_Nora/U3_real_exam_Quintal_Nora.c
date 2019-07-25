@@ -55,9 +55,9 @@ int checkForObstacles(WbDeviceTag sen_1) {
   dis = (distance*RANGE)/MAXRE;
 
     if (dis > OBSTACLE_DISTANCE)
-    return FREEWAY;
-  else
-    return OBSTACLE;
+      return FREEWAY;
+    else
+      return OBSTACLE;
 }
 
 int checkForEnemy(WbDeviceTag distance_sensor) {
@@ -138,9 +138,9 @@ int main(int argc, char **argv)
   wb_robot_init();
 
   WbDeviceTag wheels[3];
-     wheels[0] = wb_robot_get_device("wheel1");
-     wheels[1] = wb_robot_get_device("wheel2");
-     wheels[2] = wb_robot_get_device("wheel3");
+    wheels[0] = wb_robot_get_device("wheel1");
+    wheels[1] = wb_robot_get_device("wheel2");
+    wheels[2] = wb_robot_get_device("wheel3");
 
   WbDeviceTag radar[1] = wb_robot_get_device("RADAR");
   WbDeviceTag Gun[1] = wb_robot_get_device("RT_GUN");
@@ -171,6 +171,7 @@ int main(int argc, char **argv)
 
     if (robot_state == GO) {
       ds_state = checkForObstacles(dis_sen);
+      
 
       if (ds_state == FREEWAY) {
         goRobot(wheels, vel);
