@@ -1,0 +1,238 @@
+#VRML_SIM R2019a utf8
+WorldInfo {
+  contactProperties [
+    ContactProperties {
+      material1 "robotBody"
+      material2 "floor"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.04589538641413416 -0.9701658318792019 -0.23805854775670965 3.5113970052983356
+  position 0.5793789285685952 0.8574563638369028 -1.1837961384011473
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+}
+Robot {
+  translation -0.6100000000000002 0.075 0
+  children [
+    DEF GR_BODY Group {
+      children [
+        DEF ROBOT_BODY Shape {
+          appearance PBRAppearance {
+            baseColor 0.8 0 0
+          }
+          geometry DEF G_BODY Box {
+            size 0.25 0.07 0.1
+          }
+        }
+        Transform {
+          translation 0 0.1 0
+          children [
+            Shape {
+              appearance PBRAppearance {
+              }
+              geometry Cylinder {
+                height 0.2
+                radius 0.04
+              }
+            }
+          ]
+        }
+        Transform {
+          translation 0.11 -0.05 0
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.4470588235294118 0.6235294117647059 0.8117647058823529
+                roughness 1
+                metalness 0
+              }
+              geometry Sphere {
+                radius 0.015
+              }
+            }
+          ]
+        }
+      ]
+    }
+    DEF GUN HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0 0.17 0
+      }
+      device [
+        PositionSensor {
+          name "gun_pos"
+          resolution 0.0038484
+        }
+        RotationalMotor {
+          name "gun"
+          maxVelocity 30.3687
+          maxTorque 0.847386
+        }
+      ]
+      endPoint DEF GUN Solid {
+        translation 0.04 0.17 0
+        children [
+          DEF GUN Shape {
+            appearance PBRAppearance {
+              baseColor 0.9607843137254902 0.4745098039215686 0
+            }
+            geometry Box {
+              size 0.13 0.01 0.01
+            }
+          }
+        ]
+        name "solid(2)"
+        boundingObject USE GUN
+      }
+    }
+    DEF RADAR HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 1 0
+        anchor 0 0.19 0
+      }
+      device [
+        RotationalMotor {
+          name "radar"
+          maxVelocity 30.3687
+          maxTorque 0.84738621
+        }
+        PositionSensor {
+          name "radar_posicion"
+          resolution 0.0038484
+        }
+      ]
+      endPoint DistanceSensor {
+        translation 0.07 0.18999999999999995 0
+        children [
+          Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.15 0.01 0.01
+            }
+          }
+        ]
+        name "radar_sensor"
+        lookupTable [
+          0 0 0
+          0.05 0 0
+          0.4 255 0
+        ]
+      }
+    }
+    DEF WHEEL1_JOINT HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor -0.05 0 0.06
+      }
+      device [
+        PositionSensor {
+          name "encoder1"
+          resolution 0.0038484
+        }
+        RotationalMotor {
+          name "motor_right"
+          maxVelocity 30.36873
+          maxTorque 0.847386
+        }
+      ]
+      endPoint DEF WHEEL1 Solid {
+        translation -0.049993298639710804 4.1991004434008365e-06 0.059998844022989384
+        rotation -0.9999897256320203 0.00320538877059385 -0.003205325759751868 1.570810065190105
+        children [
+          DEF SH_WHEEL Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry DEF G_WHEEL Cylinder {
+              height 0.02
+              radius 0.075
+            }
+          }
+        ]
+        boundingObject USE G_WHEEL
+        physics Physics {
+        }
+      }
+    }
+    DEF WHEEL2_JOINT HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor -0.05 0 -0.06
+      }
+      device [
+        RotationalMotor {
+          name "motor_left"
+          maxVelocity 30.36873
+          maxTorque 0.84738621
+        }
+      ]
+      endPoint DEF WHEEL2 Solid {
+        translation -0.05000464053569955 -4.475340648047137e-06 -0.06000114527398893
+        rotation -0.9999897819929817 0.0031965094835165403 -0.003196597683583317 1.5708098619478401
+        children [
+          USE SH_WHEEL
+        ]
+        name "solid(1)"
+        boundingObject USE SH_WHEEL
+        physics Physics {
+        }
+      }
+    }
+    DistanceSensor {
+      translation 0.125 0 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.9294117647058824 0.8313725490196079 0
+          }
+          geometry Box {
+            size 0.02 0.01 0.01
+          }
+        }
+      ]
+      name "distance_sensor"
+      lookupTable [
+        0 0 0
+        0.1 0 0
+        2 1023 0
+      ]
+      resolution 1
+    }
+  ]
+  contactMaterial ""
+  boundingObject USE GR_BODY
+  physics Physics {
+    mass 1
+    centerOfMass [
+      0 0 0
+    ]
+  }
+  controller "u3_Real_Exam_Quintal_Nora"
+}
+Solid {
+  translation 0.6046674017296654 0.050000000000000225 -0.04764435587661282
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.3607843137254902 0.20784313725490197 0.4
+      }
+      geometry DEF G_OBSTACLE1 Box {
+        size 0.1 0.7 0.1
+      }
+    }
+  ]
+  boundingObject USE G_OBSTACLE1
+}
