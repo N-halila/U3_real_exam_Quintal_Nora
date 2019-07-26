@@ -1,0 +1,6 @@
+%%Gun distance sensor has 10 bit resolution, with a min range of 10cm and max range of 2m. Mobile distance sensors have 8 bit resolution, with a min range of 5cm and max range of 40 cm.
+
+
+the gun distance sensor has in it look up table the rows the first one is 0 for the 3 places, the second one is .1m, 0, and 0 in that orden, in the third row goes 2m, 1023, 0 in that order.
+
+the movil distance sensor has 8 bits of resolution that gives us a value of 255 for the look up table, we have again 3 rows in the first one we have 0, 0, 0, in the second one 0.05m,0, 0 and in the third one .4m, 255, 0, in that order.
